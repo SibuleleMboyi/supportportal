@@ -56,14 +56,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // "cors()" Enables this API to be accessed by a certain given URI not just any
+        // "cors()" Enables this API to be accessed by a certain given URI not just any.
         // "csrf()" findout what it does
         // "SessionCreationPolicy.STATEFUL" implies that the state of the User who is
         // logged in is continously kept as they Browse throughout the WebSite or App.
         // "SessionCreationPolicy.STATELESS" because we are using JWT, there is no need
         // to keep the state of the User since the Token already does that,
         // "antMatchers(SecurityConstants.PUBLIC_URLS).permitAll()" implies that all the
-        // URLs mentioned in the ecurityConstants.PUBLIC_URLS array must not be
+        // URLs mentioned in the SecurityConstants.PUBLIC_URLS array must not be
         // authenticated, instead a User can directly access them.
         // "anyRequest().authenticated()" means that all other requests to the services must be authenticated.
 
@@ -77,7 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManager() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
 
