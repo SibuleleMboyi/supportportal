@@ -8,6 +8,7 @@ import com.springsecurity.supportportal.exceptions.UsernameExistsException;
 import com.springsecurity.supportportal.exceptions.domains.EmailExistsException;
 import com.springsecurity.supportportal.exceptions.domains.UserNotFoundException;
 import com.springsecurity.supportportal.repositories.UserRepository;
+import com.springsecurity.supportportal.services.LoginAttemptsService;
 import com.springsecurity.supportportal.services.UserService;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -48,6 +49,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
 
+    @Autowired
+    private LoginAttemptsService loginAttemptsService;
+
     // Is called whenever Spring Security is trying to check the authentication of
     // the User credentials.
     @Override
@@ -57,12 +61,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             LOGGER.error(NO_USER_FOUND_BY_SURNAME + username);
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_SURNAME + username);
         } else {
+            validateLoginAttempt(user);
             user.setLastLoginDateDisplay(user.getLastLoginDate());
             user.setLastLoginDate(new Date());
             userRepository.save(user);
             UserPrincipal userPrincipal = new UserPrincipal(user);
             LOGGER.info("Returning found User by Username: " + username);
             return userPrincipal;
+        }
+    }
+
+    private void validateLoginAttempt(User user){
+        if(user.isIsNotLocked()){
+            if(loginAttemptsService.hasExceededMaxAttempts(user.getUsername())){
+                user.setIsNotLocked(false);
+            } else{
+                user.setIsNotLocked(true);
+            }
+        } else{
+            loginAttemptsService.evictUserFromLoginCache(user.getUsername());
         }
     }
 

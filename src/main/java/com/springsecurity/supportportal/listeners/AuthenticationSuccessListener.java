@@ -1,7 +1,5 @@
 package com.springsecurity.supportportal.listeners;
 
-import java.util.concurrent.ExecutionException;
-
 import com.springsecurity.supportportal.domains.User;
 import com.springsecurity.supportportal.services.LoginAttemptsService;
 
@@ -19,7 +17,7 @@ public class AuthenticationSuccessListener {
     // We listen to this event and register the User in the LoginAttemptCache
 
     @EventListener
-    public void onAuthenticationSuccess(AuthenticationSuccessEvent event) throws ExecutionException{
+    public void onAuthenticationSuccess(AuthenticationSuccessEvent event){
         Object principle = event.getAuthentication().getPrincipal();
         if(principle instanceof User){
             User user = (User) event.getAuthentication().getPrincipal();

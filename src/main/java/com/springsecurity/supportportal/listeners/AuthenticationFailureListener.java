@@ -1,8 +1,5 @@
 package com.springsecurity.supportportal.listeners;
 
-import java.security.Principal;
-import java.util.concurrent.ExecutionException;
-
 import com.springsecurity.supportportal.services.LoginAttemptsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,7 @@ public class AuthenticationFailureListener {
     // Every time a User fails to login, AuthenticationFailureBadCredentialsEvent gets fired.
     // We listen to this event and register the User in the LoginAttemptCache
     @EventListener
-    public void AuthenticationFailure(AuthenticationFailureBadCredentialsEvent event) throws ExecutionException{
+    public void AuthenticationFailure(AuthenticationFailureBadCredentialsEvent event){
         Object principle = event.getAuthentication().getPrincipal();
         if(principle instanceof String){ 
             String username = (String) event.getAuthentication().getPrincipal();
