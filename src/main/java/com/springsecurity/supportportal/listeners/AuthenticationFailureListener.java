@@ -5,7 +5,9 @@ import com.springsecurity.supportportal.services.LoginAttemptsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AuthenticationFailureListener {
     @Autowired
     private LoginAttemptsService loginAttemptService;

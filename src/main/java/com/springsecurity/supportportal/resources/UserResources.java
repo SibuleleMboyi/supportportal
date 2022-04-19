@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 
@@ -28,37 +30,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = { "/", "/user" })
 public class UserResources extends ExceptionHandling {
 
-
     @Autowired
     private UserServiceImpl userServiceImpl;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
 
+    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
-       authenticate(user.getUsername(), user.getPassword());
-       User loginUser = userServiceImpl.findUserByUsername(user.getUsername());
-       UserPrincipal userPrincipal= new UserPrincipal(loginUser);
-       HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-        return new ResponseEntity<User>(loginUser,jwtHeader, HttpStatus.OK);
+        authenticate(user.getUsername(), user.getPassword());
+        User loggedInUser = userServiceImpl.findUserByUsername(user.getUsername());
+        UserPrincipal userPrincipal = new UserPrincipal(loggedInUser);
+        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+        return new ResponseEntity<User>(loggedInUser, jwtHeader, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistsException, EmailExistsException {
+    public ResponseEntity<User> register(@RequestBody User user)
+            throws UserNotFoundException, UsernameExistsException, EmailExistsException {
         User newUser = userServiceImpl.register(user.getFirstName(), user.getLastName(), user.getUsername(),
                 user.getEmail());
         return new ResponseEntity<User>(newUser, HttpStatus.OK);
 
     }
 
-
-    private HttpHeaders getJwtHeader(UserPrincipal userPrincipal){
-        HttpHeaders  headers = new HttpHeaders(); 
+    private HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {
+        HttpHeaders headers = new HttpHeaders();
         headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userPrincipal));
         return headers;
     }
