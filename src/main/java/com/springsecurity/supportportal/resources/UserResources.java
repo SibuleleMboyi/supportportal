@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 @RestController
 
@@ -38,8 +37,6 @@ public class UserResources extends ExceptionHandling {
 
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
-
-    private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
