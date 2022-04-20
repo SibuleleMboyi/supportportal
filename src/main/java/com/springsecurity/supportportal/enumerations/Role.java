@@ -1,6 +1,6 @@
 package com.springsecurity.supportportal.enumerations;
 
-import static com.springsecurity.supportportal.constants.Authorities.*;
+import static com.springsecurity.supportportal.constants.AuthoritiesConstants.*;
 
 public enum Role {
     ROLE_USER(USER_AUTHORITIES),

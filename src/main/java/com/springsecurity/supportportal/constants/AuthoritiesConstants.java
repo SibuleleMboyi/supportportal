@@ -1,6 +1,6 @@
 package com.springsecurity.supportportal.constants;
 
-public class Authorities {
+public class AuthoritiesConstants {
     public static final String[] USER_AUTHORITIES = { "user:read" };
     public static final String[] HR_AUTHORITIES = { "user:read" };
     public static final String[] MANAGER_AUTHORITIES = { "user:read", "user:update" };
