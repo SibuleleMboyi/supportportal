@@ -15,7 +15,7 @@ import javax.persistence.Id;
 //a different String that can be saved into the database.
 
 @Entity
-@Table(name= "users")
+@Table(name = "users")
 public class User implements Serializable {
 
     // primary key
@@ -36,12 +36,12 @@ public class User implements Serializable {
     private Date joinedDate;
 
     // Each User can have any role such as ROLE_ADMIN, ROLE_MANAGER.
-    // And  each role can have 1 or more authorities like read, write, update
+    // And each role can have 1 or more authorities like read, write, update
     private String role;
 
     // Example: read, create, write, delete, update
-    //private ArrayList<String> authorities = new ArrayList<String>();
-    private String []authorities;
+    // private ArrayList<String> authorities = new ArrayList<String>();
+    private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
 
@@ -50,7 +50,7 @@ public class User implements Serializable {
 
     public User(Long id, String userId, String firstName, String lastName, String username, String password,
             String email, String profieImageUrl, Date lastLoginDate, Date lastLoginDateDisplay, Date joinedDate,
-            String role, String []authorities, boolean isActive, boolean isNotLocked) {
+            String role, String[] authorities, boolean isActive, boolean isNotLocked) {
         this.id = id;
         this.userId = userId;
         this.firstName = firstName;
@@ -164,11 +164,11 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public String [] getAuthorities() {
+    public String[] getAuthorities() {
         return this.authorities;
     }
 
-    public void setAuthorities(String [] authorities) {
+    public void setAuthorities(String[] authorities) {
         this.authorities = authorities;
     }
 
