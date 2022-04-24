@@ -2,6 +2,9 @@ package com.springsecurity.supportportal.resources;
 
 import static com.springsecurity.supportportal.constants.SecurityConstants.JWT_TOKEN_HEADER;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import com.springsecurity.supportportal.domains.User;
 import com.springsecurity.supportportal.domains.UserPrincipal;
 import com.springsecurity.supportportal.utilities.JWTTokenProvider;
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+/**
+ * Figure out why the Email service is not working
+ * **/
 @RestController
 
 // URLs for this class start by "/user"
@@ -49,7 +55,7 @@ public class UserResources extends ExceptionHandling {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user)
-            throws UserNotFoundException, UsernameExistsException, EmailExistsException {
+            throws UserNotFoundException, UsernameExistsException, EmailExistsException, AddressException, MessagingException {
         User newUser = userServiceImpl.register(user.getFirstName(), user.getLastName(), user.getUsername(),
                 user.getEmail());
         return new ResponseEntity<User>(newUser, HttpStatus.OK);

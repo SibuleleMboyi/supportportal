@@ -8,6 +8,7 @@ import com.springsecurity.supportportal.exceptions.UsernameExistsException;
 import com.springsecurity.supportportal.exceptions.domains.EmailExistsException;
 import com.springsecurity.supportportal.exceptions.domains.UserNotFoundException;
 import com.springsecurity.supportportal.repositories.UserRepository;
+import com.springsecurity.supportportal.services.EmailService;
 import com.springsecurity.supportportal.services.LoginAttemptsService;
 import com.springsecurity.supportportal.services.UserService;
 
@@ -28,6 +29,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 // This class is run when the User tries to login into the system.
 // So it checks if the user is already in the database yet.
 // Spring Security needs "UserDetailsService" class to leverage the security aspect of getting the User
@@ -43,14 +47,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     // "UserService.class".
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
+    private LoginAttemptsService loginAttemptsService;
+    private EmailService emailService;
 
     @Autowired
-    private LoginAttemptsService loginAttemptsService;
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bcryptPasswordEncoder,
+            LoginAttemptsService loginAttemptsService, EmailService emailService) {
+        this.userRepository = userRepository;
+        this.bcryptPasswordEncoder = bcryptPasswordEncoder;
+        this.loginAttemptsService = loginAttemptsService;
+        this.emailService = emailService;
+    }
 
     // Is called whenever Spring Security is trying to check the authentication of
     // the User credentials.
@@ -85,7 +94,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User register(String firstName, String lastName, String username, String email)
-            throws UserNotFoundException, UsernameExistsException, EmailExistsException {
+            throws UserNotFoundException, UsernameExistsException, EmailExistsException, AddressException,
+            MessagingException {
         validateNewUsernameAndEmail(StringUtils.EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
@@ -104,6 +114,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setProfieImageUrl(getTemporalyProfileUrl());
         userRepository.save(user);
         LOGGER.info("New user password " + password);
+        emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
     }
 
