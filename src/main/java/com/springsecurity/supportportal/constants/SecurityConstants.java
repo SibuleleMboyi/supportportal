@@ -17,9 +17,10 @@ public class SecurityConstants {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
+    public static final String NO_USER_FOUND_BY_EMAIL = "No user found by email: ";
+
     public static final String USERNAME_ALREADY_EXISTS = "Username already exists";
     public static final String NO_USER_FOUND_BY_SURNAME = "No user found by username: ";
-    public static final String DEFAULT_USER_IMAGE_PATH = "/user/image/profile/temp";
     // These URLs will be public, User does not need to be Authenticated to access
     // them
     // Reset password URL has stars because it will be a URL of the form ...
