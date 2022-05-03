@@ -14,4 +14,6 @@ public class EmailConstants {
     public static final int DEFAULT_PORT = 465;
     public static final String SMTP_START_TLS_ENABLE = "mail.smtp.starttls.enable";
     public static final String SMTP_START_TLS_REQUIRED = "mail.smtp.starttls.required";
+    public static final String EMAIL_SENT = "An email with a new password is sent to: ";
+    public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
 }
