@@ -65,6 +65,7 @@ public class UserResources extends ExceptionHandling {
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
 
+    // @RequestBody means that the data is coming from Postman body
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         authenticate(user.getUsername(), user.getPassword());
@@ -84,11 +85,12 @@ public class UserResources extends ExceptionHandling {
 
     }
 
+    // @RequestParam means that the data is coming from a form
     // Internally add a User if having privilegdes to do so.
     // Find a way to optimize this method.
     @PostMapping("/add")
     public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName, @RequestParam("usename") String username,
+            @RequestParam("lastName") String lastName, @RequestParam("username") String username,
             @RequestParam("email") String email, @RequestParam("role") String role,
             @RequestParam("isActive") String isActive, @RequestParam("isNonLocked") String isNonLocked,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws IOException {
@@ -102,7 +104,7 @@ public class UserResources extends ExceptionHandling {
     @PostMapping("/update")
     public ResponseEntity<User> updateUser(@RequestParam("currentUsername") String currentUsername,
             @RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName, @RequestParam("usename") String username,
+            @RequestParam("lastName") String lastName, @RequestParam("username") String username,
             @RequestParam("email") String email, @RequestParam("role") String role,
             @RequestParam("isActive") String isActive, @RequestParam("isNonLocked") String isNonLocked,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws IOException {
@@ -120,6 +122,7 @@ public class UserResources extends ExceptionHandling {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
+    // @PathVariable means that the data is coming from a URL
     @GetMapping("find/{username}")
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
         User user = userServiceImpl.findUserByUsername(username);
@@ -154,7 +157,7 @@ public class UserResources extends ExceptionHandling {
 
     @PostMapping("/updateProfileImage")
     public ResponseEntity<User> updateProfileImage(
-            @RequestParam("lastName") String lastName, @RequestParam("usename") String username,
+            @RequestParam("lastName") String lastName, @RequestParam("username") String username,
             @RequestParam("profileImage") MultipartFile profileImage)
             throws IOException, UserNotFoundException, UsernameExistsException, EmailExistsException {
 
@@ -163,21 +166,22 @@ public class UserResources extends ExceptionHandling {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping(path= "/image/{username}/{fileName}", produces= IMAGE_JPEG_VALUE)
-    public byte[] getProfileImage(@PathVariable("username") String username, @PathVariable("fileName") String fileName) throws IOException{
+    @GetMapping(path = "/image/{username}/{fileName}", produces = IMAGE_JPEG_VALUE)
+    public byte[] getProfileImage(@PathVariable("username") String username, @PathVariable("fileName") String fileName)
+            throws IOException {
         return Files.readAllBytes(Paths.get(USER_FOLDER + username + FORWARD_SLASH + fileName));
     }
 
-    @GetMapping(path= "/image/profile/{username}", produces= IMAGE_JPEG_VALUE)
-    public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException{
+    @GetMapping(path = "/image/profile/{username}", produces = IMAGE_JPEG_VALUE)
+    public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
         URL url = new URL(TEMP_PROFILE_IMAGE_BASE_URL + username);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        try( InputStream inputStream =  url.openStream()) {
+        try (InputStream inputStream = url.openStream()) {
             int bytesRead;
             byte[] chunk = new byte[1024];
-            while((bytesRead = inputStream.read(chunk)) > 0){
-               byteArrayOutputStream.write(chunk, 0, bytesRead);
+            while ((bytesRead = inputStream.read(chunk)) > 0) {
+                byteArrayOutputStream.write(chunk, 0, bytesRead);
             }
         }
         return byteArrayOutputStream.toByteArray();

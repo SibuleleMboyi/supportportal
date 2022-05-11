@@ -180,7 +180,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername,
-            String newEmail, String role, boolean isNotLocked, boolean isActive, MultipartFile profileImage) throws IOException {
+            String newEmail, String role, boolean isNotLocked, boolean isActive, MultipartFile profileImage)
+            throws IOException {
         try {
             User currentUser = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
             currentUser.setFirstName(newFirstName);
@@ -233,23 +234,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private void saveProfileImage(User user, MultipartFile profileImage) throws IOException {
-        if(profileImage != null){
+        if (profileImage != null) {
             Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
-            if(Files.exists(userFolder)){
+            if (!Files.exists(userFolder)) {
                 Files.createDirectories(userFolder);
                 LOGGER.info(DIRECTORY_CREATED + userFolder);
             }
             Files.deleteIfExists(Paths.get(userFolder + user.getUsername() + DOT + JPG_EXTENSION));
-            Files.copy(profileImage.getInputStream(), userFolder.resolve(user.getUsername() + DOT + JPG_EXTENSION), REPLACE_EXISTING);
-        user.setProfieImageUrl(setProfileImageUrl(user.getUsername()));
-        userRepository.save(user);
-        LOGGER.info(FILE_SAVED_IN_FILE_SYSTEM + profileImage.getOriginalFilename());
+            Files.copy(profileImage.getInputStream(), userFolder.resolve(user.getUsername() + DOT + JPG_EXTENSION),
+                    REPLACE_EXISTING);
+            user.setProfieImageUrl(setProfileImageUrl(user.getUsername()));
+            userRepository.save(user);
+            LOGGER.info(FILE_SAVED_IN_FILE_SYSTEM + profileImage.getOriginalFilename());
         }
     }
 
     private String setProfileImageUrl(String username) {
-        return  ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH + username + FORWARD_SLASH + username + DOT + JPG_EXTENSION)
-        .toUriString();
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(USER_IMAGE_PATH + FORWARD_SLASH + username + DOT + JPG_EXTENSION)
+                .toUriString();
     }
 
     private Role getRoleEnumName(String role) {
@@ -257,7 +260,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private String getTemporalyProfileUrl(String username) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(DEFAULT_USER_IMAGE_PATH + username)
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(DEFAULT_USER_IMAGE_PATH + FORWARD_SLASH + username)
                 .toUriString();
     }
 
@@ -285,17 +289,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // This part of the program is executed when a User is updating their
         // information, i.e Username or Email
         if (!StringUtils.isBlank(currentUsername)) {
-            if (currentUser == null) {
-                throw new UserNotFoundException(NO_USER_FOUND_BY_SURNAME + currentUsername);
-            }
-
-            if (userByNewUsername != null && !currentUser.getId().equals(userByNewUsername.getId())) {
-                throw new UsernameExistsException(USERNAME_ALREADY_EXISTS);
-            }
-
-            if (userByEmail != null && !currentUser.getId().equals(userByEmail.getId())) {
-                throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
-            }
+            /*
+             * if (currentUser == null) {
+             * throw new UserNotFoundException(NO_USER_FOUND_BY_SURNAME + currentUsername);
+             * }
+             * 
+             * if (userByNewUsername != null &&
+             * !currentUser.getId().equals(userByNewUsername.getId())) {
+             * throw new UsernameExistsException(USERNAME_ALREADY_EXISTS);
+             * }
+             * 
+             * if (userByEmail != null && !currentUser.getId().equals(userByEmail.getId()))
+             * {
+             * throw new EmailExistsException(EMAIL_ALREADY_EXISTS);
+             * }
+             */
 
             return currentUser;
         }

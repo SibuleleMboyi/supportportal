@@ -1,2 +1,14 @@
-  "username": "jo",
-  "password": "3Dnue8QndU"
+  "username": "SandoLuvo",
+  "password": "WXknkrUj4a"
+  
+  {  
+    "username": "SandoLuvo",
+    "firstName": "Luvo",
+    "lastName": "null",
+    "email": "Luvo@gmail.com",
+    "role": "ROLE_USER",
+    "isActive": "true",
+    "isNonLocked": "true",
+    "profileImage": "http://localhost:8081/user/image/profile/SandoLuvo"
+  
+}

@@ -16,7 +16,7 @@ public class SecurityConstants {
     public static final String FORBIDDEN_MESSAGE = "You need to log in to access this page";
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
-    public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
+    public static final String EMAIL_ALREADY_EXISTS = "Email alr eady exists";
     public static final String NO_USER_FOUND_BY_EMAIL = "No user found by email: ";
 
     public static final String USERNAME_ALREADY_EXISTS = "Username already exists";
@@ -25,8 +25,11 @@ public class SecurityConstants {
     // them
     // Reset password URL has stars because it will be a URL of the form ...
     // "/user/resetpassword/user_email"
-    // public static final String[] PUBLIC_URLS = { "/user/login", "/user/register",
-    // "/user/resetpassword/**","/user/image/**" };
+
+    /*
+     * public static final String[] PUBLIC_URLS = { "/user/login", "/user/register",
+     * "/user/resetpassword/**", "/user/image/**" };
+     */
 
     // Allows all requests
     public static final String[] PUBLIC_URLS = { "**" };
