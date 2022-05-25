@@ -1,3 +1,3 @@
 # supportportal
 
-I am learning Spring Security. On completion of this course, I am planning to build a full API with a Security feature.
+In this project, I am learning Spring Security with Jeson Web Token.
